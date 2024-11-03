@@ -14,9 +14,13 @@ from scapy.all import sniff
 statistics = {}
 history = {}
 interval_stats = {}
+hosts = {}
+
 stats_lock = Lock()
 history_lock = Lock()
 interval_lock = Lock()
+hosts_lock = Lock()
+
 sampling_interval = 10  # Intervalo de amostragem para o grupo history (em segundos)
 
 oidToName = {
@@ -42,27 +46,52 @@ def create_interval_entry(interface):
 def clear_interval_stats(interface):
     interval_stats[interface] = {'etherHistoryPkts': 0, 'etherHistoryOctets': 0, 'etherHistoryOversizePkts': 0, 'etherHistoryBroadcastPkts': 0}
 
+def create_host_entry(host):
+    if host not in hosts:
+        hosts[host] = {'hostAddress': host, 'hostInPkts': 0, 'hostOutPkts': 0, 'hostInOctets': 0, 'hostOutOctets': 0, 'hostOutErrors': 0, 'hostOutBroadcastPkts': 0, 'hostOutMulticastPkts': 0}
+
 def is_broadcast(packet):
     return packet.dst == 'ff:ff:ff:ff:ff:ff'
+
+def updateStats(interface, packet):
+    with stats_lock, interval_lock:
+        create_stats_entry(interface)
+        create_interval_entry(interface)
+        interval_stats[interface]['etherHistoryPkts'] += 1
+        statistics[interface]['etherStatsPkts'] += 1
+
+        interval_stats[interface]['etherHistoryOctets'] += len(packet)
+        statistics[interface]['etherStatsOctets'] += len(packet)
+        if len(packet) > 1518:
+            interval_stats[interface]['etherHistoryOversizePkts'] += 1
+            statistics[interface]['etherStatsOversizePkts'] += 1
+        if is_broadcast(packet):
+            interval_stats[interface]['etherHistoryBroadcastPkts'] += 1
+            statistics[interface]['etherStatsBroadcastPkts'] += 1
+
+def update_hosts(packet):
+    with hosts_lock:
+        src_host = packet.src
+        dst_host = packet.dst
+        create_host_entry(src_host)
+        create_host_entry(dst_host)
+        hosts[src_host]['hostOutPkts'] += 1
+        hosts[src_host]['hostOutOctets'] += len(packet)
+        if is_broadcast(packet):
+            hosts[src_host]['hostOutBroadcastPkts'] += 1
+        if packet.dst[0] == '01':
+            hosts[src_host]['hostOutMulticastPkts'] += 1
+
+        # ToDo: verificar se ocorreu erro no envio (hostOutErrors)
+
+        hosts[dst_host]['hostInPkts'] += 1
+        hosts[dst_host]['hostInOctets'] += len(packet)
 
 # Função para capturar pacotes em uma interface e atualizar estatísticas
 def capture_packets(interface):
     def process_packet(packet):
-        with stats_lock, interval_lock:
-            create_stats_entry(interface)
-            create_interval_entry(interface)
-            interval_stats[interface]['etherHistoryPkts'] += 1
-            statistics[interface]['etherStatsPkts'] += 1
-
-            interval_stats[interface]['etherHistoryOctets'] += len(packet)
-            statistics[interface]['etherStatsOctets'] += len(packet)
-            if len(packet) > 1518:
-                interval_stats[interface]['etherHistoryOversizePkts'] += 1
-                statistics[interface]['etherStatsOversizePkts'] += 1
-            if is_broadcast(packet):
-                interval_stats[interface]['etherHistoryBroadcastPkts'] += 1
-                statistics[interface]['etherStatsBroadcastPkts'] += 1
-
+        updateStats(interface, packet)
+        update_hosts(packet)
     sniff(iface=interface, prn=process_packet)
 
 # Função para monitorar todas as interfaces especificadas
@@ -99,7 +128,7 @@ def capture_history():
             history[timestamp] = interval_stats.copy()
             for interface in interval_stats:
                 clear_interval_stats(interface)
-            print(f"History: {history}")
+            print(hosts)
 
 # Função principal
 if __name__ == "__main__":
