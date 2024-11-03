@@ -24,6 +24,11 @@ oidToName = {
     '.1.3.6.1.2.1.16.1.1.1.4': 'etherStatsOctets',
     '.1.3.6.1.2.1.16.1.1.1.5': 'etherStatsPkts',
     '.1.3.6.1.2.1.16.1.1.1.6': 'etherStatsBroadcastPkts',
+
+    '.1.3.6.1.2.1.16.2.2.1.11': 'etherHistoryOversizePkts',
+    '.1.3.6.1.2.1.16.2.2.1.5': 'etherHistoryOctets',
+    '.1.3.6.1.2.1.16.2.2.1.6': 'etherHistoryPkts',
+    '.1.3.6.1.2.1.16.2.2.1.7': 'etherHistoryBroadcastPkts',
 }
 
 def create_stats_entry(interface):
@@ -31,7 +36,11 @@ def create_stats_entry(interface):
         statistics[interface] = {'etherStatsPkts': 0, 'etherStatsOctets': 0, 'etherStatsOversizePkts': 0, 'etherStatsBroadcastPkts': 0}
 
 def create_interval_entry(interface):
-        interval_stats[interface] = {'etherStatsPkts': 0, 'etherStatsOctets': 0, 'etherStatsOversizePkts': 0, 'etherStatsBroadcastPkts': 0}
+    if interface not in interval_stats:
+        clear_interval_stats(interface)
+
+def clear_interval_stats(interface):
+    interval_stats[interface] = {'etherHistoryPkts': 0, 'etherHistoryOctets': 0, 'etherHistoryOversizePkts': 0, 'etherHistoryBroadcastPkts': 0}
 
 def is_broadcast(packet):
     return packet.dst == 'ff:ff:ff:ff:ff:ff'
@@ -42,15 +51,16 @@ def capture_packets(interface):
         with stats_lock, interval_lock:
             create_stats_entry(interface)
             create_interval_entry(interface)
-            interval_stats[interface]['etherStatsPkts'] += 1
+            interval_stats[interface]['etherHistoryPkts'] += 1
             statistics[interface]['etherStatsPkts'] += 1
-            interval_stats[interface]['etherStatsOctets'] += len(packet)
+
+            interval_stats[interface]['etherHistoryOctets'] += len(packet)
             statistics[interface]['etherStatsOctets'] += len(packet)
             if len(packet) > 1518:
-                interval_stats[interface]['etherStatsOversizePkts'] += 1
+                interval_stats[interface]['etherHistoryOversizePkts'] += 1
                 statistics[interface]['etherStatsOversizePkts'] += 1
             if is_broadcast(packet):
-                interval_stats[interface]['etherStatsBroadcastPkts'] += 1
+                interval_stats[interface]['etherHistoryBroadcastPkts'] += 1
                 statistics[interface]['etherStatsBroadcastPkts'] += 1
 
     sniff(iface=interface, prn=process_packet)
@@ -88,7 +98,7 @@ def capture_history():
         with stats_lock, history_lock:
             history[timestamp] = interval_stats.copy()
             for interface in interval_stats:
-                create_interval_entry(interface)
+                clear_interval_stats(interface)
             print(f"History: {history}")
 
 # Função principal
