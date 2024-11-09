@@ -62,18 +62,32 @@ columns = {
     },
 }
 
+statusValid = 1
 
 def set_entry(table, oid, value):
-    column = columns[oid]
+    # print("oid", oid)
+    line = oid[-1:]
+    # print("line",line)
+    oidColumn = oid[:-2]
+
+    # print("oidColumn",oidColumn)
+
+    column = columns.get(oidColumn)
+
+    # print("column", column)
 
     #Erro se column udefined
 
-    if (column.access == 'read-only'):
+    if (column == None or column.access == 'read-only'):
         return False
+
+    if (column.isStatus and value == statusValid):
+        has_all_required(table, line)
+        # Se não tiver todos passa pra invalido e da erro (verificar se realmente passa para inválido)
     
-    column.value = value
+    newEntry = column.copy()
     
-    newEntry = column
+    newEntry.value = value
     
     table[oid] = newEntry
 
