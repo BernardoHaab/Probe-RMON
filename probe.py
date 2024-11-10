@@ -9,7 +9,7 @@ import time
 
 from scapy.all import sniff
 
-from entry import set_entry, get_entry
+from entry import set_entry, get_entry, statistics_status, status_valid
 
 # Configure logging
 logging.basicConfig(
@@ -28,33 +28,49 @@ table_lock = threading.Lock()
 
 # Function to handle each sniffed packet
 def packet_handler(packet):
-    global packet_count
-    with count_lock:
-        packet_count += 1
-        # logging.info(f"Packet received. Total count: {packet_count}")
+    print(packet.show())
+
+def updateStats(interface, packet):
+    print(interface)
+    print(packet)
+
+def is_statistics_valid():
+    with table_lock:
+        status_column = table.get(statistics_status)
+        return status_column != None and status_column.get('value') == status_valid
 
 # Sniffer thread function
 def packet_sniffer(interface):
-    logging.info(f"Starting packet sniffer on interface: {interface}")
-    try:
-        sniff(prn=packet_handler, iface=interface, store=False, promisc=True)
-    except Exception as e:
-        logging.error(f"Error in packet sniffer: {e}")
+
+    def process_packet(packet):
+        if is_statistics_valid():
+            updateStats(interface, packet)
+        # update_hosts(packet)
+
+    sniff(iface=interface, prn=process_packet)
+
+    # logging.info(f"Starting packet sniffer on interface: {interface}")
+    # try:
+    #     sniff(prn=packet_handler, iface='eth0', store=False, promisc=True)
+    # except Exception as e:
+    #     print("Error in sniffer")
+    #     print(e)
+        # logging.error(f"Error in packet sniffer: {e}")
 
 def main():
     logging.info("Program started")
     interface = sys.argv[1]
     logging.info(f"Interface provided: {interface}")
 
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', interface)
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.2', interface)
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', interface)
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.2', interface)
     
     # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Eu")
     # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
     # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
 
     # print("---------------------------------------")
-    pprint.pprint(table)
+    # pprint.pprint(table)
 
     while True:
         try:
@@ -107,7 +123,7 @@ def main():
         except EOFError:
             logging.info("EOFError encountered, exiting main loop")
             break
-        except Exception as e:
+        # except Exception as e:
             logging.error(f"Error in main loop: {e}")
 
 if __name__ == "__main__":
