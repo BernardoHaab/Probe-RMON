@@ -9,7 +9,7 @@ import time
 
 from scapy.all import sniff
 
-from entry import set_entry
+from entry import set_entry, get_entry
 
 # Configure logging
 logging.basicConfig(
@@ -47,11 +47,13 @@ def main():
     logging.info(f"Interface provided: {interface}")
 
     set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', interface)
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Eu")
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.2', interface)
+    
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Eu")
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
 
-    print("---------------------------------------")
+    # print("---------------------------------------")
     pprint.pprint(table)
 
     while True:

@@ -2,7 +2,6 @@
 # - valor
 # - access
 # - type
-import numpy as np
 
 READ_CREATE='read-create'
 READ_ONLY='read-only'
@@ -91,15 +90,16 @@ def set_entry(table, oid, value):
     table[oid] = newEntry
 
 def get_entry(table, oid):
-    column = columns.get(oid)
+    # column = columns.get(oid)
+
+    column = table.get(oid)
     if column == None:
         return None
-
-    return table.get(oid)
+    return column.get('value')
 
 def is_new_row(table, tableOid, line):
     for columnOid in table.keys():
-        if columnOid.startswith(tableOid) and columnOid[len(tableOid)] == '.':
+        if columnOid.startswith(tableOid) and columnOid[len(tableOid)] == '.' and table.get(columnOid+"."+line):
             return False
     return True
 
@@ -110,7 +110,7 @@ def create_new_row(table, tableOid, line):
 
     lineIds = line.split('.')
 
-    print("lineIds", lineIds)
+    # print("lineIds", lineIds)
 
     for keyColumn in sortedKeyColumns:
         newEntry = columns[keyColumn].copy()
@@ -128,8 +128,6 @@ def has_all_required(table, tableOid, line):
     requiredColumns = {key : val for key, val in columns.items()
                    if key.startswith(tableOid) and val['access'] == READ_CREATE}
     requiredKeys = requiredColumns.keys()
-
-    requiredColumns.keys()
 
     for columnOid in requiredKeys:
         tableColumn = table.get(columnOid+"."+line)
