@@ -90,6 +90,13 @@ def set_entry(table, oid, value):
     newEntry['value'] = value
     table[oid] = newEntry
 
+def get_entry(table, oid):
+    column = columns.get(oid)
+    if column == None:
+        return None
+
+    return table.get(oid)
+
 def is_new_row(table, tableOid, line):
     for columnOid in table.keys():
         if columnOid.startswith(tableOid) and columnOid[len(tableOid)] == '.':
