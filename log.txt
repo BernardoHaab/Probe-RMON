@@ -1,0 +1,55 @@
+2024-11-09 23:46:46,215 - INFO - Program started
+2024-11-09 23:46:46,215 - INFO - Program started
+2024-11-09 23:46:46,215 - INFO - Interface provided: eth0
+2024-11-09 23:47:03,482 - INFO - Received PING command
+2024-11-09 23:47:03,483 - INFO - Starting packet sniffer on interface: eth0
+2024-11-09 23:47:03,483 - INFO - Sniffer thread started
+2024-11-09 23:47:03,483 - ERROR - Error in packet sniffer: [Errno 1] Operation not permitted
+2024-11-09 23:47:37,751 - INFO - Program started
+2024-11-09 23:47:37,751 - INFO - Program started
+2024-11-09 23:47:37,751 - INFO - Interface provided: eth0
+2024-11-09 23:47:49,753 - INFO - Program started
+2024-11-09 23:47:49,753 - INFO - Program started
+2024-11-09 23:47:49,753 - INFO - Interface provided: eth0
+2024-11-09 23:48:49,354 - INFO - Program started
+2024-11-09 23:48:49,354 - INFO - Program started
+2024-11-09 23:48:49,354 - INFO - Interface provided: eth0
+2024-11-09 23:49:33,177 - INFO - Program started
+2024-11-09 23:49:33,177 - INFO - Program started
+2024-11-09 23:49:33,177 - INFO - Interface provided: eth0
+2024-11-09 23:49:52,499 - INFO - Program started
+2024-11-09 23:49:52,499 - INFO - Program started
+2024-11-09 23:49:52,499 - INFO - Interface provided: eth0
+2024-11-09 23:50:03,516 - INFO - Program started
+2024-11-09 23:50:03,516 - INFO - Program started
+2024-11-09 23:50:03,517 - INFO - Interface provided: eth0
+2024-11-09 23:50:31,643 - INFO - Program started
+2024-11-09 23:50:31,643 - INFO - Program started
+2024-11-09 23:50:31,643 - INFO - Interface provided: eth0
+2024-11-09 23:51:05,144 - INFO - Program started
+2024-11-09 23:51:05,144 - INFO - Program started
+2024-11-09 23:51:05,144 - INFO - Interface provided: eth0
+2024-11-09 23:51:31,246 - INFO - Program started
+2024-11-09 23:51:31,246 - INFO - Program started
+2024-11-09 23:51:31,246 - INFO - Interface provided: eth0
+2024-11-09 23:56:07,414 - INFO - Program started
+2024-11-09 23:56:07,414 - INFO - Program started
+2024-11-09 23:56:07,414 - INFO - Interface provided: eth0
+2024-11-09 23:58:54,965 - INFO - Program started
+2024-11-09 23:58:54,965 - INFO - Program started
+2024-11-09 23:58:54,965 - INFO - Interface provided: eth0
+2024-11-09 23:59:52,714 - INFO - Program started
+2024-11-09 23:59:52,714 - INFO - Program started
+2024-11-09 23:59:52,714 - INFO - Interface provided: eth0
+2024-11-10 00:00:59,174 - INFO - Program started
+2024-11-10 00:00:59,174 - INFO - Program started
+2024-11-10 00:00:59,174 - INFO - Interface provided: eth0
+2024-11-10 00:01:22,270 - INFO - Program started
+2024-11-10 00:01:22,270 - INFO - Program started
+2024-11-10 00:01:22,270 - INFO - Interface provided: eth0
+2024-11-10 00:23:12,179 - INFO - Program started
+2024-11-10 00:23:12,179 - INFO - Program started
+2024-11-10 00:23:12,179 - INFO - Interface provided: eth0
+2024-11-10 00:25:00,918 - INFO - Program started
+2024-11-10 00:25:00,919 - INFO - Program started
+2024-11-10 00:25:00,919 - INFO - Interface provided: eth0

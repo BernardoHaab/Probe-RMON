@@ -10,7 +10,7 @@ from entry import set_entry
 
 # Configure logging
 logging.basicConfig(
-    filename='./log.txt',
+    filename='/workspaces/Probe-RMON/log.txt',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -42,6 +42,11 @@ def main():
     logging.info("Program started")
     interface = sys.argv[1]
     logging.info(f"Interface provided: {interface}")
+
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', interface)
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Eu")
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
     
     while True:
         try:
@@ -87,7 +92,7 @@ def main():
                 else:
                     print("None")
             else:
-                logging.warning("Unknown command received")
+                logging.warning("Unknown command received", line)
                 print("NONE")
 
             sys.stdout.flush()
@@ -98,4 +103,5 @@ def main():
             logging.error(f"Error in main loop: {e}")
 
 if __name__ == "__main__":
+    logging.info("Program started")
     main()
