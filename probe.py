@@ -1,16 +1,19 @@
-import threading
-from scapy.all import sniff
-import time
-import sys
 import datetime
-import socket
-import os
 import logging
+import os
+import pprint
+import socket
+import sys
+import threading
+import time
+
+from scapy.all import sniff
+
 from entry import set_entry
 
 # Configure logging
 logging.basicConfig(
-    filename='/workspaces/Probe-RMON/log.txt',
+    filename='./log.txt',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -47,14 +50,17 @@ def main():
     set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Eu")
     set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
     set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
-    
+
+    print("---------------------------------------")
+    pprint.pprint(table)
+
     while True:
         try:
             line = sys.stdin.readline()
             if not line:
                 raise EOFError()
             line = line.strip()
-            
+
             if 'PING' in line:
                 logging.info("Received PING command")
                 print("PONG")
@@ -70,7 +76,7 @@ def main():
                 oid = sys.stdin.readline()
                 oid = oid.strip()
                 logging.info(f"OID received: {oid}")
-                
+
                 if oid == ".1.3.6.1.2.1.16.1.1.1.1.1":
                     logging.info("Valid OID received")
                     print(".1.3.6.1.2.1.16.1.1.1.1.1")

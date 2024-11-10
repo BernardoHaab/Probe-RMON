@@ -69,66 +69,67 @@ columns = {
 statusValid = 1
 
 def set_entry(table, oid, value):
-    print("oid", oid)
-    line = oid[-1:]
-    tableOid = oid[:-4]
-
-    get_Table_oid(oid)
-    print("line",line)
-    oidColumn = oid[:-2]
-
-    print("oidColumn",oidColumn)
-
+    oidColumn = get_column_oid(oid)
     column = columns.get(oidColumn)
 
-    print(str(column))
-    # print("column", column)
     if (column == None or column.get('access') == 'read-only'):
         # ToDo: Verificar como retornar erro (No momento ta tratando no probe e printando mensagem "None")
         return False
 
-    # ToDo: Adicionar coluna key (que é adicionada automaticamente) se ainda nao existir
-    
+    line = oid[len(oidColumn)+1:]
+    tableOid = oidColumn.split(".")
+    tableOid = ".".join(tableOid[:-1])
 
     if (column['isStatus'] and value == statusValid and has_all_required(table, tableOid, line) == False):
-        # Se não tiver todos passa pra invalido e da erro (verificar se realmente passa para inválido)
         return False
-    
-    newEntry = column.copy()
 
+    if is_new_row(table, tableOid, line):
+        create_new_row(table, tableOid, line)
+
+    newEntry = column.copy()
     newEntry['value'] = value
-    
     table[oid] = newEntry
 
-# def is_new_row(table, tableOid, line):
-#     # T
+def is_new_row(table, tableOid, line):
+    for columnOid in table.keys():
+        if columnOid.startswith(tableOid) and columnOid[len(tableOid)] == '.':
+            return False
+    return True
 
-def get_Table_oid(oid):
-    columnsOids = np.array(columns.keys())
+def create_new_row(table, tableOid, line):
+    keyColumns = {key : val for key, val in columns.items() if val['isKey'] == True}
+    keyColumns = keyColumns.keys()
+    sortedKeyColumns = sorted(keyColumns)
 
-    print("--->", columnsOids)
-    print("===>", str(columnsOids))
+    lineIds = line.split('.')
 
-    keys = columnsOids.where(oid.startsWith(columnsOids))
-    print(keys)
+    print("lineIds", lineIds)
+
+    for keyColumn in sortedKeyColumns:
+        newEntry = columns[keyColumn].copy()
+        newEntry['value'] = lineIds.pop(0)
+        table[keyColumn + '.' + line] = newEntry
+
+def get_column_oid(oid):
+    for columnOid in columns.keys():
+      if oid.startswith(columnOid) and oid[len(columnOid)] == '.':
+        return columnOid
+    return None
 
 def has_all_required(table, tableOid, line):
 
     requiredColumns = {key : val for key, val in columns.items()
-                   if val['access'] == READ_CREATE}
+                   if key.startswith(tableOid) and val['access'] == READ_CREATE}
     requiredKeys = requiredColumns.keys()
-
-    print("required columns" + str(requiredKeys))
 
     requiredColumns.keys()
 
     for columnOid in requiredKeys:
-        print("Column+line", columnOid+"."+line)
         tableColumn = table.get(columnOid+"."+line)
         if tableColumn == None or tableColumn['value'] == None:
             print("tableColumn", str(tableColumn))
             print("Não tem todos os campos")
             return False
 
-    
+
     return True;
