@@ -104,7 +104,7 @@ def is_new_row(table, tableOid, line):
     return True
 
 def create_new_row(table, tableOid, line):
-    keyColumns = {key : val for key, val in columns.items() if val['isKey'] == True}
+    keyColumns = {key : val for key, val in columns.items() if key.startswith(tableOid) and val['isKey'] == True}
     keyColumns = keyColumns.keys()
     sortedKeyColumns = sorted(keyColumns)
 
