@@ -1,18 +1,19 @@
-import threading
-from scapy.all import sniff
-import time
-import sys
 import datetime
-import socket
-import os
 import logging
+import os
+import pprint
+import socket
+import sys
+import threading
+import time
+
+from scapy.all import sniff
 
 from entry import set_entry, get_entry, statistics_status, status_valid
-from table_operations import inc_stats_pkts
 
 # Configure logging
 logging.basicConfig(
-    filename='/tmp/log.txt',
+    filename='./log.txt',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -27,45 +28,57 @@ table_lock = threading.Lock()
 
 # Function to handle each sniffed packet
 def packet_handler(packet):
-    global packet_count
-    with count_lock:
-        packet_count += 1
-        # logging.info(f"Packet received. Total count: {packet_count}")
+    print(packet.show())
+
+def updateStats(interface, packet):
+    print(interface)
+    print(packet)
 
 def is_statistics_valid():
-    is_valid = False
     with table_lock:
-        status_oid = statistics_status+'.1'
-        status_column = table.get(status_oid)
-        is_valid = status_column != None and status_column.get('value') == status_valid
-    return is_valid;
-
-
-def update_stats():
-    if is_statistics_valid():
-        inc_stats_pkts(table, 1); #Buscar linha dinamicamente (talvez fazer para cada lina)
+        status_column = table.get(statistics_status)
+        return status_column != None and status_column.get('value') == status_valid
 
 # Sniffer thread function
 def packet_sniffer(interface):
-    logging.info(f"Starting packet sniffer on interface: {interface}")
-    try:
-        sniff(prn=packet_handler, iface=interface, store=False, promisc=True)
-    except Exception as e:
-        logging.error(f"Error in packet sniffer: {e}")
+
+    def process_packet(packet):
+        if is_statistics_valid():
+            updateStats(interface, packet)
+        # update_hosts(packet)
+
+    sniff(iface=interface, prn=process_packet)
+
+    # logging.info(f"Starting packet sniffer on interface: {interface}")
+    # try:
+    #     sniff(prn=packet_handler, iface='eth0', store=False, promisc=True)
+    # except Exception as e:
+    #     print("Error in sniffer")
+    #     print(e)
+        # logging.error(f"Error in packet sniffer: {e}")
 
 def main():
     logging.info("Program started")
     interface = sys.argv[1]
     logging.info(f"Interface provided: {interface}")
+
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', interface)
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.2', interface)
     
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Eu")
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
+
+    # print("---------------------------------------")
+    # pprint.pprint(table)
+
     while True:
         try:
             line = sys.stdin.readline()
             if not line:
                 raise EOFError()
             line = line.strip()
-            logging.info("NOVA LINHA: ---"+line+"---")
-            
+
             if 'PING' in line:
                 logging.info("Received PING command")
                 print("PONG")
@@ -81,7 +94,7 @@ def main():
                 oid = sys.stdin.readline()
                 oid = oid.strip()
                 logging.info(f"OID received: {oid}")
-                
+
                 if oid == ".1.3.6.1.2.1.16.1.1.1.1.1":
                     logging.info("Valid OID received")
                     print(".1.3.6.1.2.1.16.1.1.1.1.1")
@@ -97,23 +110,22 @@ def main():
                 oid = sys.stdin.readline()
                 oid = oid.strip()
                 logging.info(f"OID received: {oid}")
-                has_set = False
-                with table_lock:
-                    set_entry(table, oid, "Teste")
+                has_set = set_entry(table, oid, "Teste")
                 if has_set:
                     print("Sucess")
                 else:
                     print("None")
             else:
-                logging.warning("Unknown command received")
+                logging.warning("Unknown command received", line)
                 print("NONE")
 
             sys.stdout.flush()
         except EOFError:
             logging.info("EOFError encountered, exiting main loop")
             break
-        except Exception as e:
+        # except Exception as e:
             logging.error(f"Error in main loop: {e}")
 
 if __name__ == "__main__":
+    logging.info("Program started")
     main()

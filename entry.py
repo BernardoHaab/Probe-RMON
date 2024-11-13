@@ -6,57 +6,73 @@
 READ_CREATE='read-create'
 READ_ONLY='read-only'
 
+column_oids = {
+    'etherStatsIndex': '.1.3.6.1.2.1.16.1.1.1.1',
+    'etherStatsDataSource': '.1.3.6.1.2.1.16.1.1.1.2',
+    'etherStatsOctets': '.1.3.6.1.2.1.16.1.1.1.4',
+    'etherStatsPkts':    '.1.3.6.1.2.1.16.1.1.1.5',
+    'etherStatsBroadcastPkts':    '.1.3.6.1.2.1.16.1.1.1.6',
+    'etherStatsOversizePkts': '.1.3.6.1.2.1.16.1.1.1.10',
+    'etherStatsOwner': '.1.3.6.1.2.1.16.1.1.1.20',
+    'etherStatsStatus': '.1.3.6.1.2.1.16.1.1.1.21',
+
+    'etherHistoryOversizePkts':    '.1.3.6.1.2.1.16.2.2.1.11',
+    'etherHistoryOctets':    '.1.3.6.1.2.1.16.2.2.1.5',
+    'etherHistoryPkts':    '.1.3.6.1.2.1.16.2.2.1.6',
+    'etherHistoryBroadcastPkts':    '.1.3.6.1.2.1.16.2.2.1.7',
+}
+
 columns = {
-    '.1.3.6.1.2.1.16.1.1.1.1': { #Key
+    column_oids['etherStatsIndex']: { #Key
         'value': None,
         'access': READ_ONLY,
         'type': 'int',
         'isKey': True,
         'isStatus': False
     },
-    '.1.3.6.1.2.1.16.1.1.1.2': { # Interfacce
+    column_oids['etherStatsDataSource']: { # Interfacce
         'value': None,
         'access': READ_CREATE,
         'type': 'string',
         'isKey': False,
         'isStatus': False
     },
-    '.1.3.6.1.2.1.16.1.1.1.10': {
+    column_oids['etherStatsOversizePkts']: {
         'value': None,
         'access': READ_ONLY,
         'type': 'string',
         'isKey': False,
         'isStatus': False
     },
-    '.1.3.6.1.2.1.16.1.1.1.4': {
+    column_oids['etherStatsOctets']: {
         'value': None,
         'access': READ_ONLY,
         'type': 'string',
         'isKey': False,
         'isStatus': False
     },
-    '.1.3.6.1.2.1.16.1.1.1.5': {
+    column_oids['etherStatsPkts']: {
         'value': None,
         'access': READ_ONLY,
         'type': 'string',
         'isKey': False,
         'isStatus': False
     },
-    '.1.3.6.1.2.1.16.1.1.1.6': {
+    column_oids['etherStatsBroadcastPkts']: {
         'value': None,
         'access': READ_ONLY,
         'type': 'string',
         'isKey': False,
         'isStatus': False
     },
-    '.1.3.6.1.2.1.16.1.1.1.20': { #Owner
+    column_oids['etherStatsOwner']: { #Owner
         'value': None,
         'access': READ_CREATE,
         'type': 'string',
         'isKey': False,
         'isStatus': False
     },
-    '.1.3.6.1.2.1.16.1.1.1.21': { #Status
+    column_oids['etherStatsStatus']: { #Status
         'value': None,
         'access': READ_CREATE,
         'type': 'string',
