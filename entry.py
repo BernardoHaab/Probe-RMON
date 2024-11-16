@@ -75,7 +75,7 @@ columns = {
     column_oids['etherStatsStatus']: { #Status
         'value': None,
         'access': READ_CREATE,
-        'type': 'string',
+        'type': 'integer',
         'isKey': False,
         'isStatus': True
     },
@@ -103,7 +103,12 @@ def set_entry(table, oid, value):
         create_new_row(table, tableOid, line)
 
     newEntry = column.copy()
-    newEntry['value'] = value
+
+    if (newEntry.get('type') == 'integer'):
+        newEntry['value'] = int(value)
+    else:
+        newEntry['value'] = value
+    
     table[oid] = newEntry
 
 def get_entry(table, oid):

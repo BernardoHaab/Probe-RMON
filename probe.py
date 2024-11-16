@@ -7,8 +7,8 @@ import socket
 import os
 import logging
 
-from entry import set_entry, get_entry, statistics_status, status_valid
-from table_operations import inc_stats_pkts
+from entry import set_entry, get_entry, statistics_status, status_valid, column_oids, columns
+from table_operations import inc_stats_pkts, acc_stats_octets
 
 # Configure logging
 logging.basicConfig(
@@ -27,10 +27,7 @@ table_lock = threading.Lock()
 
 # Function to handle each sniffed packet
 def packet_handler(packet):
-    global packet_count
-    with count_lock:
-        packet_count += 1
-        # logging.info(f"Packet received. Total count: {packet_count}")
+    update_stats(packet)
 
 def is_statistics_valid():
     global table
@@ -41,11 +38,12 @@ def is_statistics_valid():
         is_valid = status_column != None and status_column.get('value') == status_valid
     return is_valid;
 
-
-def update_stats():
+def update_stats(packet):
     global table
     if is_statistics_valid():
-        inc_stats_pkts(table, 1); #Buscar linha dinamicamente (talvez fazer para cada lina)
+        # logging.info("É valido!!!")
+        inc_stats_pkts(table, '1'); #Buscar linha dinamicamente (talvez fazer para cada lina)
+        acc_stats_octets(table, '1', len(packet))
 
 # Sniffer thread function
 def packet_sniffer(interface):
@@ -62,13 +60,21 @@ def main():
     logging.info(f"Interface provided: {interface}")
 
 
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', "eth0")
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Eu")
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', '1')
+
+
     # Create and start the sniffer thread
     sniffer_thread = threading.Thread(target=packet_sniffer, args=(interface,))
     sniffer_thread.daemon = True  # This makes the thread exit when the main program exits
     sniffer_thread.start()
     logging.info("Sniffer thread started")
 
-    while True:
+    stop = False
+
+    while stop == False:
         try:
             line = sys.stdin.readline()
             if not line:
@@ -106,8 +112,7 @@ def main():
 
             elif 'set' in line:
                 logging.info("Received set command")
-                oid = sys.stdin.readline()
-                oid = oid.strip()
+                oid = sys.stdin.readline().strip()
                 logging.info(f"OID received: {oid}")
 
                 data = sys.stdin.readline().strip()
@@ -117,13 +122,15 @@ def main():
                                 
                 logging.info(f"data received: {data}")
                 logging.info(f"value received: {value}")
-                logging.info(f"TRASH received: {trash}")
 
                 has_set = False
                 with table_lock:
                     set_entry(table, oid, value)
-                if has_set == False:
-                    print("None")
+                print("None")
+                # if has_set == False:
+            elif line == "":
+                logging.info("--Program end--")
+                stop = True
             else:
                 logging.warning("Unknown command received")
                 print("NONE")
@@ -134,7 +141,6 @@ def main():
             break
         except Exception as e:
             logging.error(f"Error in main loop: {e}")
-    print("--ACABOU--")
 
 if __name__ == "__main__":
     main()
