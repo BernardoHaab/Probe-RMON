@@ -7,8 +7,8 @@ import socket
 import os
 import logging
 
-from entry import set_entry, get_entry, statistics_status, status_valid, column_oids, columns
-from table_operations import inc_stats_pkts, acc_stats_octets
+from entry import set_entry, statistics_status, status_valid, get_column_oid, columns
+from table_operations import *
 
 # Configure logging
 logging.basicConfig(
@@ -24,6 +24,9 @@ count_lock = threading.Lock()
 
 table = {}
 table_lock = threading.Lock()
+
+history_lines = {}
+history_lines_lock = threading.Lock()
 
 # Function to handle each sniffed packet
 def packet_handler(packet):
@@ -41,9 +44,15 @@ def is_statistics_valid():
 def update_stats(packet):
     global table
     if is_statistics_valid():
-        # logging.info("É valido!!!")
-        inc_stats_pkts(table, '1'); #Buscar linha dinamicamente (talvez fazer para cada lina)
-        acc_stats_octets(table, '1', len(packet))
+       with table_lock:
+            # logging.info("É valido!!!")
+            inc_stats_pkts(table, '1'); #Buscar linha dinamicamente (talvez fazer para cada lina)
+            acc_stats_octets(table, '1', len(packet))
+
+def update_history(packet):
+    with history_lines_lock:
+        for line in history_lines:
+            print("--> line" + line)
 
 # Sniffer thread function
 def packet_sniffer(interface):
@@ -52,6 +61,44 @@ def packet_sniffer(interface):
         sniff(prn=packet_handler, iface=interface, store=False, promisc=True)
     except Exception as e:
         logging.error(f"Error in packet sniffer: {e}")
+
+def history_control(line_oid):
+    reps = table.get('historyControlBucketsRequested')
+    if (reps == None): return;
+    reps = reps.get('value')
+    interval = table.get('historyControlInterval').get('value')
+    [_, index] = line_oid.spli('.')
+    print('index'+ index)
+    sample_index = 1
+    print('sample_index'+ sample_index)
+
+    with history_lines_lock:
+        history_lines[index] = sample_index
+
+    for i in range(reps):
+        time.sleep(interval)
+        reps -= 1
+        with history_lines_lock:
+            sample_index += 1
+            history_lines[index] = sample_index
+        with table:
+            inc_buckets_granted(table, index)
+
+    with history_lines_lock:
+        history_lines.pop(index)
+
+
+def hanlde_new_history(oid, value):
+    if value != 1: return
+
+    column_oid = get_column_oid(oid)
+    if columns[column_oid].get('isStatus'):
+        line = oid.split(column_oid)[1]
+        print('Linha: ' + line)
+        sniffer_thread = threading.Thread(target=history_control, args=(line,))
+        sniffer_thread.daemon = True  # This makes the thread exit when the main program exits
+        sniffer_thread.start()
+
 
 def main():
     global table
@@ -126,6 +173,7 @@ def main():
                 has_set = False
                 with table_lock:
                     set_entry(table, oid, value)
+                hanlde_new_history(oid, value)
                 print("None")
                 # if has_set == False:
             elif line == "":
