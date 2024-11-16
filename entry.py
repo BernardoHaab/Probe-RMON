@@ -16,10 +16,21 @@ column_oids = {
     'etherStatsOwner': '.1.3.6.1.2.1.16.1.1.1.20',
     'etherStatsStatus': '.1.3.6.1.2.1.16.1.1.1.21',
 
-    'etherHistoryOversizePkts':    '.1.3.6.1.2.1.16.2.2.1.11',
+    'historyControlIndex':  '.1.3.6.1.2.1.16.2.1.1.1',
+    'historyControlDataSource':  '.1.3.6.1.2.1.16.2.1.1.2',
+    'historyControlBucketsRequested':  '.1.3.6.1.2.1.16.2.1.1.3',
+    'historyControlBucketsGranted':  '.1.3.6.1.2.1.16.2.1.1.4',
+    'historyControlInterval':  '.1.3.6.1.2.1.16.2.1.1.5',
+    'historyControlOwner':  '.1.3.6.1.2.1.16.2.1.1.6',
+    'historyControlStatus':  '.1.3.6.1.2.1.16.2.1.1.7',
+
+    'etherHistoryIndex':    ' .1.3.6.1.2.1.16.2.2.1.1',
+    'etherHistorySampleIndex':    ' .1.3.6.1.2.1.16.2.2.1.2',
+    'etherHistoryIntervalStart':    ' .1.3.6.1.2.1.16.2.2.1.3',
     'etherHistoryOctets':    '.1.3.6.1.2.1.16.2.2.1.5',
     'etherHistoryPkts':    '.1.3.6.1.2.1.16.2.2.1.6',
     'etherHistoryBroadcastPkts':    '.1.3.6.1.2.1.16.2.2.1.7',
+    'etherHistoryOversizePkts':    '.1.3.6.1.2.1.16.2.2.1.11',
 }
 
 columns = {
@@ -79,6 +90,107 @@ columns = {
         'isKey': False,
         'isStatus': True
     },
+
+    column_oids['historyControlIndex']: { #Key
+        'value': None,
+        'access': READ_ONLY,
+        'type': 'integer',
+        'isKey': True,
+        'isStatus': False
+    },
+    column_oids['historyControlDataSource']: { # Interfacce
+        'value': None,
+        'access': READ_CREATE,
+        'type': 'string',
+        'isKey': False,
+        'isStatus': False
+    },
+    column_oids['historyControlBucketsRequested']: { # Qnt de leituras 
+        'value': None,
+        'access': READ_CREATE,
+        'type': 'integer',
+        'isKey': False,
+        'isStatus': False
+    },
+    column_oids['historyControlBucketsGranted']: { # Qnt de leituras realizadas
+        'value': None,
+        'access': READ_ONLY,
+        'type': 'integer',
+        'isKey': False,
+        'isStatus': False
+    },
+    column_oids['historyControlInterval']: { # Intervalo em segundos 
+        'value': None,
+        'access': READ_CREATE,
+        'type': 'integer',
+        'isKey': False,
+        'isStatus': False
+    },
+    column_oids['historyControlOwner']: { #Owner
+        'value': None,
+        'access': READ_CREATE,
+        'type': 'string',
+        'isKey': False,
+        'isStatus': False
+    },
+    column_oids['historyControlStatus']: { #Status
+        'value': None,
+        'access': READ_CREATE,
+        'type': 'integer',
+        'isKey': False,
+        'isStatus': True
+    },
+
+    column_oids['etherHistoryIndex']: { # Key de control
+        'value': None,
+        'access': READ_ONLY,
+        'type': 'integer',
+        'isKey': True,
+        'isStatus': False
+    },
+    column_oids['etherHistorySampleIndex']: { # Key
+        'value': None,
+        'access': READ_CREATE,
+        'type': 'string',
+        'isKey': True,
+        'isStatus': False
+    },
+    column_oids['etherHistoryIntervalStart']: { # Tempo em que comçou a leitura 
+        'value': None,
+        'access': READ_ONLY,
+        'type': 'integer',
+        'isKey': False,
+        'isStatus': False
+    },
+    column_oids['etherHistoryOctets']: { # Acc de tamanho dos pacotes 
+        'value': None,
+        'access': READ_ONLY,
+        'type': 'integer',
+        'isKey': False,
+        'isStatus': False
+    },
+    column_oids['etherHistoryPkts']: {  
+        'value': None,
+        'access': READ_ONLY,
+        'type': 'integer',
+        'isKey': False,
+        'isStatus': False
+    },
+    column_oids['etherHistoryBroadcastPkts']: {  
+        'value': None,
+        'access': READ_ONLY,
+        'type': 'integer',
+        'isKey': False,
+        'isStatus': False
+    },
+    column_oids['etherHistoryOversizePkts']: {  
+        'value': None,
+        'access': READ_ONLY,
+        'type': 'integer',
+        'isKey': False,
+        'isStatus': False
+    },
+    
 }
 
 status_valid = 1
