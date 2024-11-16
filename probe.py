@@ -33,6 +33,7 @@ def packet_handler(packet):
         # logging.info(f"Packet received. Total count: {packet_count}")
 
 def is_statistics_valid():
+    global table
     is_valid = False
     with table_lock:
         status_oid = statistics_status+'.1'
@@ -42,6 +43,7 @@ def is_statistics_valid():
 
 
 def update_stats():
+    global table
     if is_statistics_valid():
         inc_stats_pkts(table, 1); #Buscar linha dinamicamente (talvez fazer para cada lina)
 
@@ -54,10 +56,18 @@ def packet_sniffer(interface):
         logging.error(f"Error in packet sniffer: {e}")
 
 def main():
+    global table
     logging.info("Program started")
     interface = sys.argv[1]
     logging.info(f"Interface provided: {interface}")
-    
+
+
+    # Create and start the sniffer thread
+    sniffer_thread = threading.Thread(target=packet_sniffer, args=(interface,))
+    sniffer_thread.daemon = True  # This makes the thread exit when the main program exits
+    sniffer_thread.start()
+    logging.info("Sniffer thread started")
+
     while True:
         try:
             line = sys.stdin.readline()
@@ -65,16 +75,11 @@ def main():
                 raise EOFError()
             line = line.strip()
             logging.info("NOVA LINHA: ---"+line+"---")
-            
+            logging.info(f"--->TABELA: {table}")
+
             if 'PING' in line:
                 logging.info("Received PING command")
                 print("PONG")
-
-                # Create and start the sniffer thread
-                sniffer_thread = threading.Thread(target=packet_sniffer, args=(interface,))
-                sniffer_thread.daemon = True  # This makes the thread exit when the main program exits
-                sniffer_thread.start()
-                logging.info("Sniffer thread started")
 
             elif 'get' in line:
                 logging.info("Received get command")
@@ -88,14 +93,16 @@ def main():
                     res = table.get(oid)
                     logging.info(f"Res: {res}")
                 
-                if res != None:
+                if res != None and res.get('value') != None:
                     # print(res.get('type'))
-                    print(".1.3.6.1.2.1.16.1.1.1.1.1")
+                    print(f"{oid}")
                     print(res.get('type'))
                     print(f"{res.get('value')}")
 
                 else:
-                    print('')
+                    print(f"{oid}")
+                    print("string")
+                    print("None")
 
             elif 'set' in line:
                 logging.info("Received set command")

@@ -1,2 +1,1 @@
-sudo setcap cap_net_raw,cap_net_admin=eip $(realpath $(which /usr/bin/python3))
-/usr/bin/python3 probe.py eth0
+/usr/bin/python3 -u /workspaces/Probe-RMON/probe.py eth0

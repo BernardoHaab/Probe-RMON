@@ -149,8 +149,8 @@ def has_all_required(table, tableOid, line):
     for columnOid in requiredKeys:
         tableColumn = table.get(columnOid+"."+line)
         if tableColumn == None or tableColumn['value'] == None:
-            print("tableColumn", str(tableColumn))
-            print("Não tem todos os campos")
+            # print("tableColumn", str(tableColumn))
+            # print("Não tem todos os campos")
             return False
 
 

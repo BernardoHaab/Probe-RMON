@@ -9,3 +9,11 @@ def inc_stats_pkts(table, line):
         etherStatsPkts['value'] = 0
     etherStatsPkts['value'] += 1
 
+def sum_stats_octets(table, line, packetLen):
+    lineOid = column_oids['etherStatsOctets'] + '.' + line
+    etherStatsOctets = table.get(lineOid)
+    if etherStatsOctets == None:
+        etherStatsOctets = columns.get(column_oids['etherStatsOctets']).copy()
+        etherStatsOctets['value'] = 0
+    etherStatsOctets['value'] += packetLen
+
