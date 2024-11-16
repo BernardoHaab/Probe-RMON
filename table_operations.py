@@ -1,23 +1,35 @@
 
 from entry import column_oids, columns
 
+def get_line_oid(columnName, line):
+    return column_oids[columnName] + '.' + line
+
+def get_col_value(table, columnName, line):
+    lineOid = get_line_oid(columnName, line)
+    column = table.get(lineOid)
+    if column == None:
+        column = columns.get(column_oids[columnName]).copy()
+        print(column)
+        if column.get('type') == 'integer':
+            column['value'] = 0
+        else:
+            column['value'] = ""
+    return column
+
 def inc_stats_pkts(table, line):
-    lineOid = column_oids['etherStatsPkts'] + '.' + line
-    # print(f"lineOid: {lineOid}")
-    etherStatsPkts = table.get(lineOid)
-    # print(f"etherStatsPkts: {etherStatsPkts}")
-    if etherStatsPkts == None:
-        etherStatsPkts = columns.get(column_oids['etherStatsPkts']).copy()
-        etherStatsPkts['value'] = 0
-    etherStatsPkts['value'] += 1
-    table[lineOid] = etherStatsPkts
+    lineOid = get_line_oid('etherStatsPkts', line)
+    oldColumn = get_col_value(table,'etherStatsPkts', line)
+    
+    oldColumn['value'] += 1
+    table[lineOid] = oldColumn
 
 def acc_stats_octets(table, line, packetLen):
-    lineOid = column_oids['etherStatsOctets'] + '.' + line
-    etherStatsOctets = table.get(lineOid)
-    if etherStatsOctets == None:
-        etherStatsOctets = columns.get(column_oids['etherStatsOctets']).copy()
-        etherStatsOctets['value'] = 0
-    etherStatsOctets['value'] += packetLen
-    table[lineOid] = etherStatsOctets
+    columnName = 'etherStatsOctets'
+    lineOid = get_line_oid(columnName, line)
+    oldColumn = get_col_value(table,columnName, line)
+    
+    oldColumn['value'] += packetLen
+    table[lineOid] = oldColumn
+
+
 

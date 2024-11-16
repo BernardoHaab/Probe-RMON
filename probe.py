@@ -12,7 +12,7 @@ from table_operations import inc_stats_pkts, acc_stats_octets
 
 # Configure logging
 logging.basicConfig(
-    filename='/tmp/log.txt',
+    filename='./log.txt',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -60,10 +60,10 @@ def main():
     logging.info(f"Interface provided: {interface}")
 
 
-    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', "eth0")
-    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Eu")
-    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
-    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', '1')
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', "eth0")
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Eu")
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', '1')
 
 
     # Create and start the sniffer thread

@@ -51,28 +51,28 @@ columns = {
     column_oids['etherStatsOversizePkts']: {
         'value': None,
         'access': READ_ONLY,
-        'type': 'string',
+        'type': 'integer',
         'isKey': False,
         'isStatus': False
     },
     column_oids['etherStatsOctets']: {
         'value': None,
         'access': READ_ONLY,
-        'type': 'string',
+        'type': 'integer',
         'isKey': False,
         'isStatus': False
     },
     column_oids['etherStatsPkts']: {
         'value': None,
         'access': READ_ONLY,
-        'type': 'string',
+        'type': 'integer',
         'isKey': False,
         'isStatus': False
     },
     column_oids['etherStatsBroadcastPkts']: {
         'value': None,
         'access': READ_ONLY,
-        'type': 'string',
+        'type': 'integer',
         'isKey': False,
         'isStatus': False
     },
