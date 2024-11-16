@@ -81,28 +81,41 @@ def main():
                 oid = sys.stdin.readline()
                 oid = oid.strip()
                 logging.info(f"OID received: {oid}")
+
+                res = None
+                with table_lock:
+                    logging.info("SEARCHING")
+                    res = table.get(oid)
+                    logging.info(f"Res: {res}")
                 
-                if oid == ".1.3.6.1.2.1.16.1.1.1.1.1":
-                    logging.info("Valid OID received")
+                if res != None:
+                    # print(res.get('type'))
                     print(".1.3.6.1.2.1.16.1.1.1.1.1")
-                    print("integer")
-                    with count_lock:
-                        print(f"{packet_count}")
-                        logging.info(f"Packet count returned: {packet_count}")
+                    print(res.get('type'))
+                    print(f"{res.get('value')}")
+
                 else:
-                    logging.warning("Invalid OID received")
-                    print("NONE")
+                    print('')
+
             elif 'set' in line:
                 logging.info("Received set command")
                 oid = sys.stdin.readline()
                 oid = oid.strip()
                 logging.info(f"OID received: {oid}")
+
+                data = sys.stdin.readline().strip()
+                trash = sys.stdin.readline().strip()
+
+                [type, value] = data.split(" ")
+                                
+                logging.info(f"data received: {data}")
+                logging.info(f"value received: {value}")
+                logging.info(f"TRASH received: {trash}")
+
                 has_set = False
                 with table_lock:
-                    set_entry(table, oid, "Teste")
-                if has_set:
-                    print("Sucess")
-                else:
+                    set_entry(table, oid, value)
+                if has_set == False:
                     print("None")
             else:
                 logging.warning("Unknown command received")
@@ -114,6 +127,7 @@ def main():
             break
         except Exception as e:
             logging.error(f"Error in main loop: {e}")
+    print("--ACABOU--")
 
 if __name__ == "__main__":
     main()

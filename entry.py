@@ -26,7 +26,7 @@ columns = {
     column_oids['etherStatsIndex']: { #Key
         'value': None,
         'access': READ_ONLY,
-        'type': 'int',
+        'type': 'integer',
         'isKey': True,
         'isStatus': False
     },
