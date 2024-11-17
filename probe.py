@@ -31,7 +31,7 @@ history_lines_lock = threading.Lock()
 # Function to handle each sniffed packet
 def packet_handler(packet):
     update_stats(packet)
-    # update_history(packet)
+    update_history(packet)
 
 def is_statistics_valid():
     global table
@@ -49,11 +49,19 @@ def update_stats(packet):
             # logging.info("É valido!!!")
             inc_stats_pkts(table, '1'); #Buscar linha dinamicamente (talvez fazer para cada lina)
             acc_stats_octets(table, '1', len(packet))
+            inc_broadcast(table, '1', packet, 'etherStatsBroadcastPkts')
+            inc_oversized(table, '1', packet, 'etherStatsOversizePkts')
+            
 
 def update_history(packet):
     with history_lines_lock:
         for line in history_lines:
-            logging.info(f"--update_history-- line: {line}")
+            sample_index = history_lines[line]
+            index_line = f"{line}.{sample_index}"
+            inc_history_pkts(table, line, sample_index)
+            acc_history_octs(table, line, sample_index, len(packet))
+            inc_broadcast(table, index_line, packet, 'etherHistoryBroadcastPkts')
+            inc_oversized(table, index_line, packet, 'etherHistoryOversizePkts')
 
 # Sniffer thread function
 def packet_sniffer(interface):
@@ -132,13 +140,16 @@ def main():
     logging.info(f"Interface provided: {interface}")
 
 
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', "eth0")
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Bernardo")
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
+    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
+
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.2.1', "eth0")
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.3.1', 3)
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.5.1', 10)
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.6.1', "Eu")
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.7.1', 2)
-    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.7.1', 1)
-    # hanlde_new_history('.1.3.6.1.2.1.16.2.1.1.7.1', '1')
 
 
     # Create and start the sniffer thread

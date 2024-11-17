@@ -16,8 +16,9 @@ def get_col_value(table, columnName, line):
     return column
 
 def inc_stats_pkts(table, line):
-    lineOid = get_line_oid('etherStatsPkts', line)
-    oldColumn = get_col_value(table,'etherStatsPkts', line)
+    column_name = 'etherStatsPkts'
+    lineOid = get_line_oid(column_name, line)
+    oldColumn = get_col_value(table,column_name, line)
     
     oldColumn['value'] += 1
     table[lineOid] = oldColumn
@@ -70,4 +71,46 @@ def set_interval_start(table, index, sample_index, interval_statr):
     column['value'] = interval_statr
     table[lineOid] = column
 
+def inc_history_pkts(table, index, sample_index):
+    column_name = 'etherHistoryPkts'
+   
+    line = f"{index}.{sample_index}"
 
+    lineOid = get_line_oid(column_name, line)
+    column = get_col_value(table,column_name, line)
+
+    column['value'] += 1
+    table[lineOid] = column
+
+def acc_history_octs(table, index, sample_index, packet_len):
+    column_name = 'etherHistoryOctets'
+   
+    line = f"{index}.{sample_index}"
+
+    lineOid = get_line_oid(column_name, line)
+    column = get_col_value(table,column_name, line)
+
+    column['value'] += packet_len
+    table[lineOid] = column
+
+def inc_broadcast(table, line, packet, column_name):
+    if(is_broadcast(packet) == False): return
+    
+    lineOid = get_line_oid(column_name, line)
+    oldColumn = get_col_value(table,column_name, line)
+    
+    oldColumn['value'] += 1
+    table[lineOid] = oldColumn
+
+def inc_oversized(table, line, packet, column_name):
+    if(len(packet) <= 1518): return
+    
+    lineOid = get_line_oid(column_name, line)
+    oldColumn = get_col_value(table,column_name, line)
+    
+    oldColumn['value'] += 1
+    table[lineOid] = oldColumn
+
+
+def is_broadcast(packet):
+    return packet.dst == 'ff:ff:ff:ff:ff:ff'

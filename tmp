@@ -1,4 +1,5 @@
 {
+    
     '.1.3.6.1.2.1.16.1.1.1.1.1': {'value': '1', 'access': 'read-only', 'type': 'integer', 'isKey': True, 'isStatus': False}, 
     '.1.3.6.1.2.1.16.1.1.1.2.1': {'value': '"eth0"', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, 
     '.1.3.6.1.2.1.16.1.1.1.20.1': {'value': '"Bernardo"', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, 
@@ -41,4 +42,36 @@
     '.1.3.6.1.2.1.16.2.1.1.7.1': {'value': 1, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': True}, 
     '.1.3.6.1.2.1.16.2.1.1.4.1': {'value': 3, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}}
 
-    .1.3.6.1.2.1.16.2.1.1.4.1
+{
+    '.1.3.6.1.2.1.16.1.1.1.1.1': {'value': '1', 'access': 'read-only', 'type': 'integer', 'isKey': True, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.1.1.1.2.1': {'value': 'eth0', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.1.1.1.20.1': {'value': 'Bernardo', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.1.1.1.21.1': {'value': 1, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': True}, 
+'.1.3.6.1.2.1.16.2.1.1.1.1': {'value': '1', 'access': 'read-only', 'type': 'integer', 'isKey': True, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.1.1.2.1': {'value': 'eth0', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.1.1.3.1': {'value': 3, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.1.1.5.1': {'value': 10, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.1.1.6.1': {'value': 'Eu', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.1.1.7.1': {'value': 1, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': True}, 
+'.1.3.6.1.2.1.16.2.1.1.4.1': {'value': 3, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.2.1.1': {'value': 1, 'access': 'read-create', 'type': 'string', 'isKey': True, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.1.1.1': {'value': '1', 'access': 'read-only', 'type': 'integer', 'isKey': True, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.3.1.1': {'value': 1731872884.687442, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.1.1.1.5.1': {'value': 1847, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.1.1.1.4.1': {'value': 715703, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.6.1.1': {'value': 332, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.5.1.1': {'value': 132326, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.1.1.1.10.1': {'value': 78, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.11.1.1': {'value': 14, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.2.1.2': {'value': 2, 'access': 'read-create', 'type': 'string', 'isKey': True, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.1.1.2': {'value': '1', 'access': 'read-only', 'type': 'integer', 'isKey': True, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.3.1.2': {'value': 1731872894.6975489, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.6.1.2': {'value': 362, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.5.1.2': {'value': 153505, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.11.1.2': {'value': 18, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.2.1.3': {'value': 3, 'access': 'read-create', 'type': 'string', 'isKey': True, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.1.1.3': {'value': '1', 'access': 'read-only', 'type': 'integer', 'isKey': True, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.3.1.3': {'value': 1731872904.7077186, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.6.1.3': {'value': 345, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.5.1.3': {'value': 127578, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}, 
+'.1.3.6.1.2.1.16.2.2.1.11.1.3': {'value': 13, 'access': 'read-only', 'type': 'integer', 'isKey': False, 'isStatus': False}}
