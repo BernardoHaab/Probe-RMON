@@ -1565,3 +1565,38 @@
 2024-11-16 22:28:54,297 - INFO - Interface provided: eth0
 2024-11-16 22:28:54,297 - INFO - Starting packet sniffer on interface: eth0
 2024-11-16 22:28:54,297 - INFO - Sniffer thread started
+2024-11-17 15:23:45,427 - INFO - Program started
+2024-11-17 15:23:45,428 - INFO - Interface provided: eth0
+2024-11-17 15:23:45,429 - INFO - Starting packet sniffer on interface: eth0
+2024-11-17 15:23:45,429 - INFO - Sniffer thread started
+2024-11-17 15:23:47,890 - INFO - NOVA LINHA: ---set---
+2024-11-17 15:23:47,890 - INFO - --->TABELA: {'.1.3.6.1.2.1.16.2.1.1.1.1': {'value': '1', 'access': 'read-only', 'type': 'integer', 'isKey': True, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.2.1': {'value': 'eth0', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.3.1': {'value': 10, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.5.1': {'value': 15, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.6.1': {'value': 'Eu', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.7.1': {'value': 2, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': True}}
+2024-11-17 15:23:47,890 - INFO - Received set command
+2024-11-17 15:23:54,268 - INFO - OID received: .1.3.6.1.2.1.16.2.1.1.7.1
+2024-11-17 15:23:57,802 - INFO - data received: i 1
+2024-11-17 15:23:57,802 - INFO - value received: 1
+2024-11-17 15:23:57,803 - ERROR - Error in main loop: can only concatenate str (not "bool") to str
+2024-11-17 15:25:00,898 - INFO - Program started
+2024-11-17 15:25:00,898 - INFO - Interface provided: eth0
+2024-11-17 15:25:00,898 - INFO - Starting packet sniffer on interface: eth0
+2024-11-17 15:25:00,898 - INFO - Sniffer thread started
+2024-11-17 15:25:03,286 - INFO - NOVA LINHA: ---set---
+2024-11-17 15:25:03,287 - INFO - --->TABELA: {'.1.3.6.1.2.1.16.2.1.1.1.1': {'value': '1', 'access': 'read-only', 'type': 'integer', 'isKey': True, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.2.1': {'value': 'eth0', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.3.1': {'value': 10, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.5.1': {'value': 15, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.6.1': {'value': 'Eu', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.7.1': {'value': 2, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': True}}
+2024-11-17 15:25:03,287 - INFO - Received set command
+2024-11-17 15:25:07,937 - INFO - OID received: .1.3.6.1.2.1.16.2.1.1.7.1
+2024-11-17 15:25:10,313 - INFO - data received: i 1
+2024-11-17 15:25:10,313 - INFO - value received: 1
+2024-11-17 15:25:10,314 - ERROR - Error in main loop: can only concatenate str (not "type") to str
+2024-11-17 15:25:47,299 - INFO - NOVA LINHA: ------
+2024-11-17 15:25:47,299 - INFO - --->TABELA: {'.1.3.6.1.2.1.16.2.1.1.1.1': {'value': '1', 'access': 'read-only', 'type': 'integer', 'isKey': True, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.2.1': {'value': 'eth0', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.3.1': {'value': 10, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.5.1': {'value': 15, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.6.1': {'value': 'Eu', 'access': 'read-create', 'type': 'string', 'isKey': False, 'isStatus': False}, '.1.3.6.1.2.1.16.2.1.1.7.1': {'value': 1, 'access': 'read-create', 'type': 'integer', 'isKey': False, 'isStatus': True}}
+2024-11-17 15:25:47,299 - INFO - --Program end--
+2024-11-17 15:26:14,555 - INFO - Program started
+2024-11-17 15:26:14,556 - INFO - Interface provided: eth0
+2024-11-17 15:26:43,267 - INFO - Program started
+2024-11-17 15:26:43,267 - INFO - Interface provided: eth0
+2024-11-17 15:27:23,667 - INFO - Program started
+2024-11-17 15:27:23,668 - INFO - Interface provided: eth0
+2024-11-17 15:27:51,391 - INFO - Program started
+2024-11-17 15:27:51,391 - INFO - Interface provided: eth0
+2024-11-17 15:27:51,392 - INFO - Starting packet sniffer on interface: eth0
+2024-11-17 15:27:51,392 - INFO - Sniffer thread started

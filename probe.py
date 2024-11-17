@@ -7,12 +7,12 @@ import socket
 import os
 import logging
 
-from entry import set_entry, statistics_status, status_valid, get_column_oid, columns
+from entry import *
 from table_operations import *
 
 # Configure logging
 logging.basicConfig(
-    filename='./log.txt',
+    filename='/tmp/log.txt',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -31,6 +31,7 @@ history_lines_lock = threading.Lock()
 # Function to handle each sniffed packet
 def packet_handler(packet):
     update_stats(packet)
+    # update_history(packet)
 
 def is_statistics_valid():
     global table
@@ -52,7 +53,7 @@ def update_stats(packet):
 def update_history(packet):
     with history_lines_lock:
         for line in history_lines:
-            print("--> line" + line)
+            logging.info(f"--update_history-- line: {line}")
 
 # Sniffer thread function
 def packet_sniffer(interface):
@@ -63,38 +64,62 @@ def packet_sniffer(interface):
         logging.error(f"Error in packet sniffer: {e}")
 
 def history_control(line_oid):
-    reps = table.get('historyControlBucketsRequested')
-    if (reps == None): return;
-    reps = reps.get('value')
-    interval = table.get('historyControlInterval').get('value')
-    [_, index] = line_oid.spli('.')
-    print('index'+ index)
-    sample_index = 1
-    print('sample_index'+ sample_index)
+    reps = None
+    requests_oid = column_oids['historyControlBucketsRequested'] + line_oid
+    interval_oid = column_oids['historyControlInterval'] + line_oid
 
-    with history_lines_lock:
-        history_lines[index] = sample_index
+    with table_lock:
+        reps = table.get(requests_oid)
+        interval = table.get(interval_oid)
+
+    logging.info("START --history_control--")
+    logging.info(f"reps: {reps}")
+
+    if (reps == None): return;
+
+    reps = reps.get('value')
+    interval = interval.get('value')
+   
+    logging.info(f"Interval: {interval}")
+    
+    [_, index] = line_oid.split('.')
+    logging.info(f"index: {index}")
+    sample_index = 1
+    logging.info(f"sample_index: {history_lines}")
+
+    # with history_lines_lock:
+    #     history_lines[index] = sample_index
 
     for i in range(reps):
-        time.sleep(interval)
-        reps -= 1
+        timestamp = time.time()
         with history_lines_lock:
-            sample_index += 1
             history_lines[index] = sample_index
-        with table:
+            logging.info(f"history_lines: {history_lines}")
+        with table_lock:
             inc_buckets_granted(table, index)
+            create_history_sample(table, index, sample_index)
+            set_interval_start(table, index, sample_index, timestamp)
+            # ToDo: add timestamp to table (etherHistoryIntervalStart)
+        sample_index += 1
+        # reps -= 1
+        time.sleep(interval)
 
     with history_lines_lock:
         history_lines.pop(index)
+        logging.info(f"history_lines: {history_lines}")
 
 
 def hanlde_new_history(oid, value):
-    if value != 1: return
+    logging.info("value: "+ value)
+    logging.info(f"type: {type(value)}")
+    logging.info(f"value != '1': {value != '1'}")
+    if value != '1': return
 
     column_oid = get_column_oid(oid)
+    logging.info(f"columns[column_oid].get('isStatus'): {columns[column_oid].get('isStatus')}")
     if columns[column_oid].get('isStatus'):
         line = oid.split(column_oid)[1]
-        print('Linha: ' + line)
+        logging.info('Linha: ' + line)
         sniffer_thread = threading.Thread(target=history_control, args=(line,))
         sniffer_thread.daemon = True  # This makes the thread exit when the main program exits
         sniffer_thread.start()
@@ -107,10 +132,13 @@ def main():
     logging.info(f"Interface provided: {interface}")
 
 
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', "eth0")
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Eu")
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', '1')
+    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.2.1', "eth0")
+    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.3.1', 3)
+    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.5.1', 10)
+    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.6.1', "Eu")
+    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.7.1', 2)
+    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.7.1', 1)
+    # hanlde_new_history('.1.3.6.1.2.1.16.2.1.1.7.1', '1')
 
 
     # Create and start the sniffer thread

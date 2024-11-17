@@ -24,9 +24,9 @@ column_oids = {
     'historyControlOwner':  '.1.3.6.1.2.1.16.2.1.1.6',
     'historyControlStatus':  '.1.3.6.1.2.1.16.2.1.1.7',
 
-    'etherHistoryIndex':    ' .1.3.6.1.2.1.16.2.2.1.1',
-    'etherHistorySampleIndex':    ' .1.3.6.1.2.1.16.2.2.1.2',
-    'etherHistoryIntervalStart':    ' .1.3.6.1.2.1.16.2.2.1.3',
+    'etherHistoryIndex':    '.1.3.6.1.2.1.16.2.2.1.1',
+    'etherHistorySampleIndex':    '.1.3.6.1.2.1.16.2.2.1.2',
+    'etherHistoryIntervalStart':    '.1.3.6.1.2.1.16.2.2.1.3',
     'etherHistoryOctets':    '.1.3.6.1.2.1.16.2.2.1.5',
     'etherHistoryPkts':    '.1.3.6.1.2.1.16.2.2.1.6',
     'etherHistoryBroadcastPkts':    '.1.3.6.1.2.1.16.2.2.1.7',
