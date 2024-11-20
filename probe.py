@@ -132,6 +132,23 @@ def hanlde_new_history(oid, value):
         sniffer_thread.daemon = True  # This makes the thread exit when the main program exits
         sniffer_thread.start()
 
+def get_next_line(line:str):
+    line_int = int(line)
+    return line_int+1
+
+def map_oid(oid):
+    column_oid = get_column_oid(oid)
+    line = oid[len(column_oid)+1:]
+
+    new_oid = f"{column_oid[:-1]}{line}.{column_oid[-1:]}"
+    # new_oid = column_oid[:-1] + line + "." + column_oid[-1:]
+    return new_oid
+
+def map_back_oid(oid, table_oid):
+    line = oid[len(table_oid): -2]
+
+    new_oid = f"{table_oid}{oid[-2:]}{line}"
+    return new_oid
 
 def main():
     global table
@@ -147,6 +164,7 @@ def main():
 
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.2.1', "eth0")
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.3.1', 3)
+    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.3.2', 7)
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.5.1', 10)
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.6.1', "Eu")
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.7.1', 2)
@@ -222,6 +240,7 @@ def main():
                 nextOid = None
 
                 if (column != None):
+                    # Pega primeira instância pelo oid passa (oid é parte de uma coluna/tabela)
                     filteredKeys = []
                     for tableOid in table.keys():
                         if tableOid.startswith(column) and tableOid[len(column)] == '.':
@@ -229,17 +248,60 @@ def main():
                     filteredKeys.sort()
                     nextOid = filteredKeys[0]
                 else :
+                    # Oid contém linha
+
+                    # Tenta pegar próxima linha da mesma coluna
                     column_oid = get_column_oid(oid)
                     line = oid[len(column_oid)+1:]
+                    next_line = get_next_line(line)
+                    
+                    nextOid = f"{column_oid}.{next_line}"
+
+                    if (table.get(nextOid) == None):
+                        # Se não tem próxima linha, pega proximo valor válido na tabela
+                        nextOid = None
+
+                        table_oid = column_oid.split(".")
+                        table_oid = ".".join(table_oid[:-1])
+
+                        filteredKeys = []
+
+                        for item in table.keys():
+                            if item.startswith(table_oid) and item[len(table_oid)] == ".":
+                                filteredKeys.append(item)
+                        
+                        mapped_oids = []
+                        
+                        # Mapeia oid:
+                        # table.coluna.lina -> tabela.linha.coluna
+                        
+                        mapped_oids = map(map_oid,filteredKeys)
+                        mapped_oids = list(mapped_oids)
+                        mapped_oids.sort()
+                        curr_id = mapped_oids.index(map_oid(oid))
+                        
+                        # Se existir proxima posição
+                        if (curr_id+1<len(mapped_oids)):
+                            nextOid = mapped_oids[curr_id+1]
+                            # Pega proximo oid e mapeia de volta
+                            # tabela.linha.coluna - > tabela.coluna.linha
+                            nextOid = map_back_oid(nextOid, table_oid)
+
+                        
+                        logging.info(f"Mapped oid: {mapped_oids}")
+
 
                 logging.info(f"nextOid: {nextOid}")
 
                 if nextOid:
-                    logging.info(f"{table.get(nextOid)}")
-                    logging.info(f"{table.get(nextOid)['value']}")
                     print(f"{nextOid}")
                     print(f"{table.get(nextOid)['type']}")
                     print(f"{table.get(nextOid)['value']}")
+                else:
+                    print(f"{oid}")
+                    print("string")
+                    print("End of TABLE")
+
 
 
             elif line == "":
@@ -255,6 +317,7 @@ def main():
             break
         except Exception as e:
             logging.error(f"Error in main loop: {e}")
+            break
 
 if __name__ == "__main__":
     main()
