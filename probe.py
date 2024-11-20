@@ -173,7 +173,7 @@ def main():
                 logging.info("Received PING command")
                 print("PONG")
 
-            elif 'get' in line:
+            elif 'get' == line:
                 logging.info("Received get command")
                 oid = sys.stdin.readline()
                 oid = oid.strip()
@@ -215,6 +215,33 @@ def main():
                 hanlde_new_history(oid, value)
                 print("None")
                 # if has_set == False:
+            elif 'getnext' == line:
+                oid = sys.stdin.readline().strip()
+                column = get_column(oid)
+
+                nextOid = None
+
+                if (column != None):
+                    filteredKeys = []
+                    for tableOid in table.keys():
+                        if tableOid.startswith(column) and tableOid[len(column)] == '.':
+                            filteredKeys.append(tableOid)
+                    filteredKeys.sort()
+                    nextOid = filteredKeys[0]
+                else :
+                    column_oid = get_column_oid(oid)
+                    line = oid[len(column_oid)+1:]
+
+                logging.info(f"nextOid: {nextOid}")
+
+                if nextOid:
+                    logging.info(f"{table.get(nextOid)}")
+                    logging.info(f"{table.get(nextOid)['value']}")
+                    print(f"{nextOid}")
+                    print(f"{table.get(nextOid)['type']}")
+                    print(f"{table.get(nextOid)['value']}")
+
+
             elif line == "":
                 logging.info("--Program end--")
                 stop = True

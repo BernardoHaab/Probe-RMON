@@ -6,6 +6,8 @@
 READ_CREATE='read-create'
 READ_ONLY='read-only'
 
+# .1.3.6.1.2.1.16.1.1.1.
+
 column_oids = {
     'etherStatsIndex': '.1.3.6.1.2.1.16.1.1.1.1',
     'etherStatsDataSource': '.1.3.6.1.2.1.16.1.1.1.2',
@@ -271,4 +273,10 @@ def has_all_required(table, tableOid, line):
             return False
 
 
-    return True;
+    return True
+    
+def get_column(oid):
+    for column in column_oids.values():
+        if column.startswith(oid):
+            return oid
+    return None
