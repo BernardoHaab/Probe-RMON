@@ -1,12 +1,14 @@
-# entry:
-# - valor
-# - access
-# - type
+
+import logging
 
 READ_CREATE='read-create'
 READ_ONLY='read-only'
 
-# .1.3.6.1.2.1.16.1.1.1.
+logging.basicConfig(
+    filename='/tmp/log.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 column_oids = {
     'etherStatsIndex': '.1.3.6.1.2.1.16.1.1.1.1',
@@ -176,6 +178,7 @@ status_invalid = 4
 statistics_status = '.1.3.6.1.2.1.16.1.1.1.21'
 
 def set_entry(table, oid, value):
+    logging.info(f"SET-ENTRY_OID: {oid}")
     oidColumn = get_column_oid(oid)
     column = columns.get(oidColumn)
 
@@ -192,8 +195,11 @@ def set_entry(table, oid, value):
             value = status_creating
         elif (value == status_creating):
             return False
-        elif (value == status_valid and has_all_required(table, tableOid, line) == False):
-            value = status_invalid
+        elif (value == status_valid):
+            if (has_all_required(table, tableOid, line) == False):
+                value = status_invalid
+            else:
+                create_default_line(table, tableOid, line)
             # return False
 
     if is_new_row(table, tableOid, line):
@@ -215,6 +221,19 @@ def get_entry(table, oid):
     if column == None:
         return None
     return column.get('value')
+
+
+def create_default_line(table, table_oid, line):
+    table_columns = {key : val for key, val in columns.items() if key.startswith(table_oid) and val['access'] == READ_ONLY and val['isKey'] == False}
+    logging.info(f"Table_columns: {table_columns}")
+    for col in table_columns:
+        complete_oid = f"{col}.{line}"
+
+        logging.info(f"-->complete_oid: {complete_oid}")
+        new_entry = columns.get(col).copy()
+        new_entry['value'] = 0
+        table[complete_oid] = new_entry
+
 
 def is_new_row(table, tableOid, line):
     for columnOid in table.keys():
@@ -263,3 +282,4 @@ def get_column(oid):
         if column.startswith(oid):
             return oid
     return None
+    

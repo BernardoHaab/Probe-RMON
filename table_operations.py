@@ -178,13 +178,3 @@ def is_len_in_interval(packet_len, lower, upper):
 def is_broadcast(packet):
     return packet.dst == 'ff:ff:ff:ff:ff:ff'
 
-def is_multicast(packet):
-  try:
-      # Parse the IP address
-      ip_obj = ipaddress.ip_address(ip)
-
-      # Check if it is multicast
-      return ip_obj.is_multicast
-  except ValueError:
-      # Invalid IP address
-      return False

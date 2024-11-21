@@ -12,7 +12,7 @@ from table_operations import *
 
 # Configure logging
 logging.basicConfig(
-    filename='./log.txt',
+    filename='/tmp/log.txt',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -50,7 +50,6 @@ def update_stats(packet):
             inc_stats_pkts(table, '1'); #Buscar linha dinamicamente (talvez fazer para cada lina)
             acc_stats_octets(table, '1', len(packet))
             inc_broadcast(table, '1', packet, 'etherStatsBroadcastPkts')
-            inc_multicast(table, '1', packet, 'etherStatsMulticastPkts')
             inc_oversized(table, '1', packet, 'etherStatsOversizePkts')
 
 
@@ -62,7 +61,6 @@ def update_history(packet):
             inc_history_pkts(table, line, sample_index)
             acc_history_octs(table, line, sample_index, len(packet))
             inc_broadcast(table, index_line, packet, 'etherHistoryBroadcastPkts')
-            inc_multicast(table, '1', packet, 'etherHistoryMulticastPkts')
             inc_oversized(table, index_line, packet, 'etherHistoryOversizePkts')
 
 # Sniffer thread function
@@ -162,7 +160,6 @@ def main():
     set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', "eth0")
     set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Bernardo")
     set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
 
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.2.1', "eth0")
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.3.1', 3)
@@ -178,6 +175,8 @@ def main():
     sniffer_thread.start()
     logging.info("Sniffer thread started")
 
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
+    
     stop = False
 
     while stop == False:
