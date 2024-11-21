@@ -1,0 +1,106 @@
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ ./restart_agent.sh 
+ * Restarting SNMP Services snmpd                                                                                               [ OK ] 
+ * snmpd is running
+
+#STATUS = createRequest
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpset -v2c -c private localhost .1.3.6.1.2.1.16.1.1.1.21.1 i 2
+iso.3.6.1.2.1.16.1.1.1.21.1 = INTEGER: 2
+
+#STATUS PASSA PARA underCreation AUTOMATICAMENTE
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.1.1.1.21.1
+iso.3.6.1.2.1.16.1.1.1.21.1 = INTEGER: 3
+
+#DEFINE DATA SOURCE
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpset -v2c -c private localhost .1.3.6.1.2.1.16.1.1.1.2.1 s eth0
+iso.3.6.1.2.1.16.1.1.1.2.1 = STRING: "eth0"
+
+#OWNER
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpset -v2c -c private localhost .1.3.6.1.2.1.16.1.1.1.20.1 s Probe
+iso.3.6.1.2.1.16.1.1.1.20.1 = STRING: "Probe"
+
+#STATUS = valid
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpset -v2c -c private localhost .1.3.6.1.2.1.16.1.1.1.21.1 i 1
+iso.3.6.1.2.1.16.1.1.1.21.1 = INTEGER: 1
+
+# AQUI O STATISTICS COMEÇA A GRAVAR DADAOS
+
+#TOTAL DE DADOS (OCTETOS) RECEBIDO ATÉ O MOMENTO
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.1.1.1.4.1
+iso.3.6.1.2.1.16.1.1.1.4.1 = INTEGER: 104906
+
+#TOTAL DE DADOS (OCTETOS) RECEBIDO ATÉ O MOMENTO
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.1.1.1.4.1
+iso.3.6.1.2.1.16.1.1.1.4.1 = INTEGER: 1688527
+
+#QUANTIDADE DE PACOTES RECEBIDO ATÉ O MOMENTO
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.1.1.1.5.1
+iso.3.6.1.2.1.16.1.1.1.5.1 = INTEGER: 578
+
+#QUANTIDADE DE PACOTES COM TAMANHO ENTRE 65 E 127 OCTETOS RECEBIDO ATÉ O MOMENTO
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.1.1.1.15.1
+iso.3.6.1.2.1.16.1.1.1.15.1 = INTEGER: 0
+
+
+
+-------------------------------------------------------HISTORY------------------------------------------------------------
+
+
+#STATUS = REQUEST CREATION
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpset -v2c -c private localhost .1.3.6.1.2.1.16.2.1.1.7.1 i 2
+iso.3.6.1.2.1.16.2.1.1.7.1 = INTEGER: 2
+
+snmpset -v2c -c private localhost .1.3.6.1.2.1.16.2.1.1.2.1 s eth0
+iso.3.6.1.2.1.16.2.1.1.2.1 = STRING: "eth0"
+
+#DEFINE PARA 3 LEITURAS DO HISTORY
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpset -v2c -c private localhost .1.3.6.1.2.1.16.2.1.1.3.1 i 3
+iso.3.6.1.2.1.16.2.1.1.3.1 = INTEGER: 3
+
+#O INTERVALO ENTRE LEITURAS SERÁ DE 10 SEGUNDOS
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpset -v2c -c private localhost .1.3.6.1.2.1.16.2.1.1.5.1 i 10
+iso.3.6.1.2.1.16.2.1.1.5.1 = INTEGER: 10
+
+#DEFINE OWNER
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpset -v2c -c private localhost .1.3.6.1.2.1.16.2.1.1.6.1 s Probe
+iso.3.6.1.2.1.16.2.1.1.6.1 = STRING: "Probe"
+
+#STATUS = VALID
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpset -v2c -c private localhost .1.3.6.1.2.1.16.2.1.1.7.1 i 1
+iso.3.6.1.2.1.16.2.1.1.7.1 = INTEGER: 1
+
+
+---------
+
+#AQUI COMEÇAM A SER FEITAS AS LEITURAS DE HISTORY
+
+#QUANTAS LEITURAS JÁ FORAM FEITAS
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.2.1.1.4.1
+iso.3.6.1.2.1.16.2.1.1.4.1 = INTEGER: 2
+
+#QUANTAS LEITURAS JÁ FORAM FEITAS
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.2.1.1.4.1
+iso.3.6.1.2.1.16.2.1.1.4.1 = INTEGER: 3
+
+#HORARIO EM SEGUNDOS DO INÍCIO DA PRIMEIRA LEITURA
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.2.2.1.3.1.1
+iso.3.6.1.2.1.16.2.2.1.3.1.1 = INTEGER: 1732156778
+
+#HORARIO EM SEGUNDOS DO INÍCIO DA SEGUNDA LEITURA
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.2.2.1.3.1.2
+iso.3.6.1.2.1.16.2.2.1.3.1.2 = INTEGER: 1732156788
+
+#HORARIO EM SEGUNDOS DO INÍCIO DA TERCEIRA LEITURA
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.2.2.1.3.1.3
+iso.3.6.1.2.1.16.2.2.1.3.1.3 = INTEGER: 1732156798
+
+#TOTAL DE DADOS (OCTETOS) RECEBIDO DURANTE O PRIMEIRO INTERVALO
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.2.2.1.5.1.1
+iso.3.6.1.2.1.16.2.2.1.5.1.1 = INTEGER: 145928
+
+#TOTAL DE DADOS (OCTETOS) RECEBIDO DURANTE O SEGUNDO INTERVALO
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.2.2.1.5.1.2
+iso.3.6.1.2.1.16.2.2.1.5.1.2 = INTEGER: 109284
+
+#TOTAL DE DADOS (OCTETOS) RECEBIDO DURANTE O TERCEIRO INTERVALO
+@BernardoHaab ➜ /workspaces/Probe-RMON (main) $ snmpget -v2c -c public localhost .1.3.6.1.2.1.16.2.2.1.5.1.3
+iso.3.6.1.2.1.16.2.2.1.5.1.3 = INTEGER: 176890

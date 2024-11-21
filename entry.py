@@ -191,6 +191,7 @@ def set_entry(table, oid, value):
     tableOid = ".".join(tableOid[:-1])
 
     if (column['isStatus']):
+        value = int(value)
         if (value == status_create_req):
             value = status_creating
         elif (value == status_creating):

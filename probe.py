@@ -157,26 +157,12 @@ def main():
     logging.info(f"Interface provided: {interface}")
 
 
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', "eth0")
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Bernardo")
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
-
-    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.2.1', "eth0")
-    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.3.1', 3)
-    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.3.2', 7)
-    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.5.1', 10)
-    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.6.1', "Eu")
-    set_entry(table, '.1.3.6.1.2.1.16.2.1.1.7.1', 2)
-
-
     # Create and start the sniffer thread
     sniffer_thread = threading.Thread(target=packet_sniffer, args=(interface,))
     sniffer_thread.daemon = True  # This makes the thread exit when the main program exits
     sniffer_thread.start()
     logging.info("Sniffer thread started")
 
-    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
-    
     stop = False
 
     while stop == False:
