@@ -12,7 +12,7 @@ from table_operations import *
 
 # Configure logging
 logging.basicConfig(
-    filename='/tmp/log.txt',
+    filename='./log.txt',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -50,8 +50,9 @@ def update_stats(packet):
             inc_stats_pkts(table, '1'); #Buscar linha dinamicamente (talvez fazer para cada lina)
             acc_stats_octets(table, '1', len(packet))
             inc_broadcast(table, '1', packet, 'etherStatsBroadcastPkts')
+            inc_multicast(table, '1', packet, 'etherStatsMulticastPkts')
             inc_oversized(table, '1', packet, 'etherStatsOversizePkts')
-            
+
 
 def update_history(packet):
     with history_lines_lock:
@@ -61,6 +62,7 @@ def update_history(packet):
             inc_history_pkts(table, line, sample_index)
             acc_history_octs(table, line, sample_index, len(packet))
             inc_broadcast(table, index_line, packet, 'etherHistoryBroadcastPkts')
+            inc_multicast(table, '1', packet, 'etherHistoryMulticastPkts')
             inc_oversized(table, index_line, packet, 'etherHistoryOversizePkts')
 
 # Sniffer thread function
@@ -87,9 +89,9 @@ def history_control(line_oid):
 
     reps = reps.get('value')
     interval = interval.get('value')
-   
+
     logging.info(f"Interval: {interval}")
-    
+
     [_, index] = line_oid.split('.')
     logging.info(f"index: {index}")
     sample_index = 1
@@ -157,10 +159,10 @@ def main():
     logging.info(f"Interface provided: {interface}")
 
 
-    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', "eth0")
-    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Bernardo")
-    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
-    # set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.2.1', "eth0")
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.20.1', "Bernardo")
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 2)
+    set_entry(table, '.1.3.6.1.2.1.16.1.1.1.21.1', 1)
 
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.2.1', "eth0")
     set_entry(table, '.1.3.6.1.2.1.16.2.1.1.3.1', 3)
@@ -202,7 +204,7 @@ def main():
                     logging.info("SEARCHING")
                     res = table.get(oid)
                     logging.info(f"Res: {res}")
-                
+
                 if res != None and res.get('value') != None:
                     # print(res.get('type'))
                     print(f"{oid}")
@@ -223,7 +225,7 @@ def main():
                 trash = sys.stdin.readline().strip()
 
                 [type, value] = data.split(" ")
-                                
+
                 logging.info(f"data received: {data}")
                 logging.info(f"value received: {value}")
 
@@ -254,7 +256,7 @@ def main():
                     column_oid = get_column_oid(oid)
                     line = oid[len(column_oid)+1:]
                     next_line = get_next_line(line)
-                    
+
                     nextOid = f"{column_oid}.{next_line}"
 
                     if (table.get(nextOid) == None):
@@ -269,17 +271,17 @@ def main():
                         for item in table.keys():
                             if item.startswith(table_oid) and item[len(table_oid)] == ".":
                                 filteredKeys.append(item)
-                        
+
                         mapped_oids = []
-                        
+
                         # Mapeia oid:
                         # table.coluna.lina -> tabela.linha.coluna
-                        
+
                         mapped_oids = map(map_oid,filteredKeys)
                         mapped_oids = list(mapped_oids)
                         mapped_oids.sort()
                         curr_id = mapped_oids.index(map_oid(oid))
-                        
+
                         # Se existir proxima posição
                         if (curr_id+1<len(mapped_oids)):
                             nextOid = mapped_oids[curr_id+1]
@@ -287,7 +289,7 @@ def main():
                             # tabela.linha.coluna - > tabela.coluna.linha
                             nextOid = map_back_oid(nextOid, table_oid)
 
-                        
+
                         logging.info(f"Mapped oid: {mapped_oids}")
 
 

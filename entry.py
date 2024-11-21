@@ -14,7 +14,14 @@ column_oids = {
     'etherStatsOctets': '.1.3.6.1.2.1.16.1.1.1.4',
     'etherStatsPkts':    '.1.3.6.1.2.1.16.1.1.1.5',
     'etherStatsBroadcastPkts':    '.1.3.6.1.2.1.16.1.1.1.6',
+    'etherStatsMulticastPkts':    '.1.3.6.1.2.1.16.1.1.1.7',
     'etherStatsOversizePkts': '.1.3.6.1.2.1.16.1.1.1.10',
+    'etherStatsPkts64Octets': '.1.3.6.1.2.1.16.1.1.1.14',
+    'etherStatsPkts65to127Octets': '.1.3.6.1.2.1.16.1.1.1.15',
+    'etherStatsPkts128to255Octets': '.1.3.6.1.2.1.16.1.1.1.16',
+    'etherStatsPkts256to511Octets': '.1.3.6.1.2.1.16.1.1.1.17',
+    'etherStatsPkts512to1023Octets': '.1.3.6.1.2.1.16.1.1.1.18',
+    'etherStatsPkts1024to1518Octets': '.1.3.6.1.2.1.16.1.1.1.19',
     'etherStatsOwner': '.1.3.6.1.2.1.16.1.1.1.20',
     'etherStatsStatus': '.1.3.6.1.2.1.16.1.1.1.21',
 
@@ -32,7 +39,16 @@ column_oids = {
     'etherHistoryOctets':    '.1.3.6.1.2.1.16.2.2.1.5',
     'etherHistoryPkts':    '.1.3.6.1.2.1.16.2.2.1.6',
     'etherHistoryBroadcastPkts':    '.1.3.6.1.2.1.16.2.2.1.7',
+    'etherHistoryMulticastPkts':    '.1.3.6.1.2.1.16.2.2.1.8',
     'etherHistoryOversizePkts':    '.1.3.6.1.2.1.16.2.2.1.11',
+}
+
+column_integer_read_only = {
+    'value': None,
+    'access': READ_ONLY,
+    'type': 'integer',
+    'isKey': False,
+    'isStatus': False
 }
 
 columns = {
@@ -50,34 +66,17 @@ columns = {
         'isKey': False,
         'isStatus': False
     },
-    column_oids['etherStatsOversizePkts']: {
-        'value': None,
-        'access': READ_ONLY,
-        'type': 'integer',
-        'isKey': False,
-        'isStatus': False
-    },
-    column_oids['etherStatsOctets']: {
-        'value': None,
-        'access': READ_ONLY,
-        'type': 'integer',
-        'isKey': False,
-        'isStatus': False
-    },
-    column_oids['etherStatsPkts']: {
-        'value': None,
-        'access': READ_ONLY,
-        'type': 'integer',
-        'isKey': False,
-        'isStatus': False
-    },
-    column_oids['etherStatsBroadcastPkts']: {
-        'value': None,
-        'access': READ_ONLY,
-        'type': 'integer',
-        'isKey': False,
-        'isStatus': False
-    },
+    column_oids['etherStatsOversizePkts']: column_integer_read_only.copy(),
+    column_oids['etherStatsOctets']: column_integer_read_only.copy(),
+    column_oids['etherStatsPkts']: column_integer_read_only.copy(),
+    column_oids['etherStatsBroadcastPkts']: column_integer_read_only.copy(),
+    column_oids['etherStatsMulticastPkts']: column_integer_read_only.copy(),
+    column_oids['etherStatsPkts64Octets']: column_integer_read_only.copy(),
+    column_oids['etherStatsPkts65to127Octets']: column_integer_read_only.copy(),
+    column_oids['etherStatsPkts128to255Octets']: column_integer_read_only.copy(),
+    column_oids['etherStatsPkts256to511Octets']: column_integer_read_only.copy(),
+    column_oids['etherStatsPkts512to1023Octets']: column_integer_read_only.copy(),
+    column_oids['etherStatsPkts1024to1518Octets']: column_integer_read_only.copy(),
     column_oids['etherStatsOwner']: { #Owner
         'value': None,
         'access': READ_CREATE,
@@ -93,6 +92,8 @@ columns = {
         'isStatus': True
     },
 
+    # --------------------------------------------------------------------------------------------------
+
     column_oids['historyControlIndex']: { #Key
         'value': None,
         'access': READ_ONLY,
@@ -107,7 +108,7 @@ columns = {
         'isKey': False,
         'isStatus': False
     },
-    column_oids['historyControlBucketsRequested']: { # Qnt de leituras 
+    column_oids['historyControlBucketsRequested']: { # Qnt de leituras
         'value': None,
         'access': READ_CREATE,
         'type': 'integer',
@@ -121,7 +122,7 @@ columns = {
         'isKey': False,
         'isStatus': False
     },
-    column_oids['historyControlInterval']: { # Intervalo em segundos 
+    column_oids['historyControlInterval']: { # Intervalo em segundos
         'value': None,
         'access': READ_CREATE,
         'type': 'integer',
@@ -143,6 +144,8 @@ columns = {
         'isStatus': True
     },
 
+    # --------------------------------------------------------------------------------------------------
+
     column_oids['etherHistoryIndex']: { # Key de control
         'value': None,
         'access': READ_ONLY,
@@ -157,42 +160,13 @@ columns = {
         'isKey': True,
         'isStatus': False
     },
-    column_oids['etherHistoryIntervalStart']: { # Tempo em que comçou a leitura 
-        'value': None,
-        'access': READ_ONLY,
-        'type': 'integer',
-        'isKey': False,
-        'isStatus': False
-    },
-    column_oids['etherHistoryOctets']: { # Acc de tamanho dos pacotes 
-        'value': None,
-        'access': READ_ONLY,
-        'type': 'integer',
-        'isKey': False,
-        'isStatus': False
-    },
-    column_oids['etherHistoryPkts']: {  
-        'value': None,
-        'access': READ_ONLY,
-        'type': 'integer',
-        'isKey': False,
-        'isStatus': False
-    },
-    column_oids['etherHistoryBroadcastPkts']: {  
-        'value': None,
-        'access': READ_ONLY,
-        'type': 'integer',
-        'isKey': False,
-        'isStatus': False
-    },
-    column_oids['etherHistoryOversizePkts']: {  
-        'value': None,
-        'access': READ_ONLY,
-        'type': 'integer',
-        'isKey': False,
-        'isStatus': False
-    },
-    
+    column_oids['etherHistoryIntervalStart']: column_integer_read_only.copy(),
+    column_oids['etherHistoryOctets']: column_integer_read_only.copy(),
+    column_oids['etherHistoryPkts']: column_integer_read_only.copy(),
+    column_oids['etherHistoryBroadcastPkts']: column_integer_read_only.copy(),
+    column_oids['etherHistoryMulticastPkts']: column_integer_read_only.copy(),
+    column_oids['etherHistoryOversizePkts']: column_integer_read_only.copy(),
+
 }
 
 status_valid = 1
@@ -222,7 +196,7 @@ def set_entry(table, oid, value):
         newEntry['value'] = int(value)
     else:
         newEntry['value'] = value
-    
+
     table[oid] = newEntry
 
 def get_entry(table, oid):
@@ -274,7 +248,7 @@ def has_all_required(table, tableOid, line):
 
 
     return True
-    
+
 def get_column(oid):
     for column in column_oids.values():
         if column.startswith(oid):
