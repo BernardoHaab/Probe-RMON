@@ -196,6 +196,9 @@ columns = {
 }
 
 status_valid = 1
+status_create_req = 2
+status_creating = 3
+status_invalid = 4
 statistics_status = '.1.3.6.1.2.1.16.1.1.1.21'
 
 def set_entry(table, oid, value):
@@ -210,8 +213,14 @@ def set_entry(table, oid, value):
     tableOid = oidColumn.split(".")
     tableOid = ".".join(tableOid[:-1])
 
-    if (column['isStatus'] and value == status_valid and has_all_required(table, tableOid, line) == False):
-        return False
+    if (column['isStatus']):
+        if (value == status_create_req):
+            value = status_creating
+        elif (value == status_creating):
+            return False
+        elif (value == status_valid and has_all_required(table, tableOid, line) == False):
+            value = status_invalid
+            # return False
 
     if is_new_row(table, tableOid, line):
         create_new_row(table, tableOid, line)
