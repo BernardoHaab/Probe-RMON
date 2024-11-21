@@ -42,6 +42,15 @@ def is_statistics_valid():
         is_valid = status_column != None and status_column.get('value') == status_valid
     return is_valid;
 
+def is_history_valid():
+    global table
+    is_valid = False
+    with table_lock:
+        oid = column_oids['historyControlStatus']+'.1'
+        column = table.get(oid)
+        is_valid = column != None and column.get('value') == status_valid
+    return is_valid;
+
 def update_stats(packet):
     global table
     if is_statistics_valid():
@@ -56,6 +65,7 @@ def update_stats(packet):
 def update_history(packet):
     with history_lines_lock:
         for line in history_lines:
+            if is_history_valid() == False: continue
             sample_index = history_lines[line]
             index_line = f"{line}.{sample_index}"
             inc_history_pkts(table, line, sample_index)
